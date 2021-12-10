@@ -73,6 +73,15 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+Menu.propTypes = {
+  open: PropTypes.bool,
+  handleDrawerClose: PropTypes.func,
+};
+
+Menu.defaultProps = {
+  open: false,
+};
+
 export default function Menu(props) {
   const classes = useStyles();
   const theme = useTheme();
@@ -123,12 +132,3 @@ export default function Menu(props) {
     </div>
   );
 }
-
-Menu.propTypes = {
-  open: PropTypes.bool,
-  handleDrawerClose: PropTypes.func,
-};
-
-Menu.defaultProps = {
-  open: false,
-};

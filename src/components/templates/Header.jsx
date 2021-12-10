@@ -38,6 +38,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+Header.propTypes = {
+  open: PropTypes.bool,
+  handleDrawerOpen: PropTypes.func,
+};
+
 export default function Header(props) {
   const classes = useStyles();
 
@@ -70,8 +75,3 @@ export default function Header(props) {
     </div>
   );
 }
-
-Header.propTypes = {
-  open: PropTypes.bool,
-  handleDrawerOpen: PropTypes.func,
-};

@@ -1,6 +1,6 @@
 import React from "react";
 
-import { Container } from "@material-ui/core";
+import { Container, Box } from "@material-ui/core";
 
 import Header from "./components/templates/Header";
 import Menu from "./components/templates/Menu";
@@ -30,17 +30,14 @@ export default function App() {
     <Router>
       <Header open={openDrawer} handleDrawerOpen={handleDrawerOpen} />
       <Menu open={openDrawer} handleDrawerClose={handleDrawerClose} />
-      <Container pt={12}>
-        <Routes>
-          <Route
-            path="/"
-            exact={true}
-            component={() => <Navigate to="/login" />}
-          />
-
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-        </Routes>
+      <Container>
+        <Box display="flex" flexDirection="row" justifyContent="center" pt={12}>
+          <Routes>
+            <Route path="/" exact={true} element={<Navigate to="/login" />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/register" element={<Register />} />
+          </Routes>
+        </Box>
       </Container>
     </Router>
   );
