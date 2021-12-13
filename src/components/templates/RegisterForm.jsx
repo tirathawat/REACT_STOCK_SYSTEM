@@ -2,6 +2,8 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, TextField } from "@material-ui/core";
+import Alert from "@material-ui/lab/Alert";
+import { useSelector } from "react-redux";
 
 import PropTypes from "prop-types";
 
@@ -31,6 +33,8 @@ export default function RegisterForm({
   const onClickCancelButton = (_) => {
     navigate(-1);
   };
+
+  const loginReducer = useSelector(({ loginReducer }) => loginReducer);
 
   return (
     <form className={classes.form} noValidate onSubmit={handleSubmit}>
@@ -62,6 +66,10 @@ export default function RegisterForm({
         autoComplete="current-password"
         autoFocus
       />
+      {/* Alert */}
+      {loginReducer.error && (
+        <Alert severity="error">{loginReducer.result}</Alert>
+      )}
       {/* Register Button */}
       <Button
         type="submit"

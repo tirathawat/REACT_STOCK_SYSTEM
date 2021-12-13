@@ -39,3 +39,15 @@ export const logout = (navigate) => {
     navigate("/login");
   };
 };
+
+export const setSuccess = (token) => {
+  return (dispatch) => {
+    dispatch(setStateToSuccess(token));
+  };
+};
+
+export const hasError = (errorMessage) => {
+  return (dispatch) => {
+    dispatch(setStateToFailed(errorMessage));
+  };
+};
