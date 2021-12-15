@@ -1,4 +1,5 @@
-import React from "react";
+
+import { ReactElement } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import { useDispatch } from "react-redux";
@@ -12,9 +13,7 @@ import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 
-import PropTypes from "prop-types";
-
-import * as loginActions from "./../../actions/login.action";
+import * as loginActions from "../../redux/actions/auth.action";
 
 const drawerWidth = 240;
 
@@ -44,12 +43,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-Header.propTypes = {
-  open: PropTypes.bool,
-  handleDrawerOpen: PropTypes.func,
-};
+interface Props {
+  open: boolean;
+  handleDrawerOpen: (e: any) => void;
+}
 
-export default function Header(props) {
+export default function Header({open, handleDrawerOpen}: Props): ReactElement {
   const classes = useStyles();
 
   const navigate = useNavigate();
@@ -65,17 +64,17 @@ export default function Header(props) {
       <AppBar
         position="static"
         className={clsx(classes.appBar, {
-          [classes.appBarShift]: props.open,
+          [classes.appBarShift]: open,
         })}
       >
         <Toolbar>
-          {!props.open && (
+          {!open && (
             <IconButton
               edge="start"
               className={classes.menuButton}
               color="inherit"
               aria-label="menu"
-              onClick={props.handleDrawerOpen}
+              onClick={handleDrawerOpen}
             >
               <MenuIcon />
             </IconButton>
@@ -91,3 +90,9 @@ export default function Header(props) {
     </div>
   );
 }
+
+
+
+
+
+

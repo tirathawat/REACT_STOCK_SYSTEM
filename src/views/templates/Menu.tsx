@@ -1,4 +1,4 @@
-import React from "react";
+import { ReactElement } from "react";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import List from "@material-ui/core/List";
@@ -11,8 +11,6 @@ import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
-
-import PropTypes from "prop-types";
 
 const drawerWidth = 240;
 
@@ -73,16 +71,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-Menu.propTypes = {
-  open: PropTypes.bool,
-  handleDrawerClose: PropTypes.func,
-};
+interface Props {
+  open: boolean;
+  handleDrawerClose: (e: any) => void;
+}
 
-Menu.defaultProps = {
-  open: false,
-};
-
-export default function Menu(props) {
+export default function Menu({ open, handleDrawerClose }: Props): ReactElement {
   const classes = useStyles();
   const theme = useTheme();
 
@@ -92,13 +86,13 @@ export default function Menu(props) {
         className={classes.drawer}
         variant="persistent"
         anchor="left"
-        open={props.open}
+        open={open}
         classes={{
           paper: classes.drawerPaper,
         }}
       >
         <div className={classes.drawerHeader}>
-          <IconButton onClick={props.handleDrawerClose}>
+          <IconButton onClick={handleDrawerClose}>
             {theme.direction === "ltr" ? (
               <ChevronLeftIcon />
             ) : (

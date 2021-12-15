@@ -3,29 +3,30 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-
-import { createStore, applyMiddleware } from "redux";
 import thunk from "redux-thunk";
-import { Provider } from "react-redux";
-import reducers from "./reducers";
 import logger from "redux-logger";
+import reducers from "./redux/reducers";
+import { createStore, applyMiddleware } from "redux";
+import { Provider } from "react-redux";
 
-var middleware = null;
-
-if (process.env.REACT_APP_IS_PRODUCTION === "1") {
-  middleware = applyMiddleware(thunk);
-} else {
-  middleware = applyMiddleware(thunk, logger);
+function getMiddleware(): any {
+  if (process.env.REACT_APP_IS_PRODUCTION === "1") {
+    return applyMiddleware(thunk);
+  } else {
+    return applyMiddleware(thunk, logger);
+  }
 }
+
+const middleware = getMiddleware();
 
 const store = createStore(reducers, middleware);
 
 ReactDOM.render(
-  <React.StrictMode>
-    <Provider store={store}>
+  <Provider store={store}>
+    <React.StrictMode>
       <App />
-    </Provider>
-  </React.StrictMode>,
+    </React.StrictMode>
+  </Provider>,
   document.getElementById("root")
 );
 

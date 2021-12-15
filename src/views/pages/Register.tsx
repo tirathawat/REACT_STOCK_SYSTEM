@@ -1,9 +1,12 @@
-import React from "react";
-import { Formik } from "formik";
-import Axios from "axios";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { ReactElement } from "react";
+
 import { makeStyles } from "@material-ui/core/styles";
+import { Formik } from "formik";
+import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+
+import { AuthState } from "../../types/state";
+import * as authActions from "../../redux/actions/auth.action";
 import {
   Card,
   CardContent,
@@ -16,17 +19,10 @@ import {
   DialogContentText,
   DialogTitle,
 } from "@material-ui/core";
-
-import RegisterForm from "../templates/RegisterForm";
-import {
-  API_BASE_URL,
-  server,
-  REACT_BACKGROUD_LOGO_IMAGE,
-} from "../../constants/constants";
-import { NORMAL_ERROR } from "../../constants/errors";
-import constantMessages from "../../constants/messages";
-import * as loginActions from "./../../actions/login.action";
-import loginReducer from "../../reducers/login.reducer";
+import { RegisterData } from "../../types/user";
+import RegisterForm from "../components/RegisterForm";
+import { REACT_BACKGROUD_LOGO_IMAGE } from "../../constants/asset";
+import * as Messages from "../../constants/messages";
 
 const useStyles = makeStyles({
   root: {
@@ -38,31 +34,30 @@ const useStyles = makeStyles({
   },
 });
 
-export default function Register() {
+interface ISubmit {
+  setSubmitting: (isSubmitting: boolean) => void;
+}
+
+export default function Login(): ReactElement {
   const classes = useStyles();
-
-  const initialValues = { username: "", password: "" };
-
-  const showForm = (props) => RegisterForm(props);
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
 
-  const onSubmit = async (values, { setSubmitting }) => {
-    var result;
-    setSubmitting(true);
-    try {
-      result = await Axios.post(API_BASE_URL + server.Register, values);
-      if (result.status !== 200) {
-        dispatch(loginActions.hasError(result.data.message));
-      }
-    } catch (_) {
-      dispatch(loginActions.hasError(NORMAL_ERROR));
-    }
-    setSubmitting(true);
-    dispatch(loginActions.setSuccess(result.data.token));
+  const initialValues: RegisterData = { username: "", password: "" };
+
+  const showForm = (props: any) => RegisterForm(props);
+
+  const onSubmit = async (data: RegisterData, form: ISubmit) => {
+    form.setSubmitting(true);
+    dispatch(authActions.register(data));
+    form.setSubmitting(true);
   };
+
+  const authReducer = useSelector<any, AuthState>(
+    (reducer) => reducer.authReducer
+  );
 
   const onCompleteDialog = () => {
     navigate("/login");
@@ -93,18 +88,18 @@ export default function Register() {
       </Card>
       {/* Dialog */}
       <Dialog
-        open={!loginReducer.error && loginReducer.result}
+        open={!authReducer.errorMessage && authReducer.user !== null}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
         {/* Dialog Title*/}
         <DialogTitle id="alert-dialog-title">
-          {constantMessages.REGISTER_COMPLETE_TITLE}
+          {Messages.REGISTER_COMPLETE_TITLE}
         </DialogTitle>
         <DialogContent>
           {/* Dialog Content Text*/}
           <DialogContentText id="alert-dialog-description">
-            {constantMessages.REGISTER_COMPLETE_DETAIL}
+            {Messages.REGISTER_COMPLETE_DETAIL}
           </DialogContentText>
         </DialogContent>
         {/* Dialog Actions*/}

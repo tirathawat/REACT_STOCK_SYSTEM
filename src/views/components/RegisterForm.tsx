@@ -1,11 +1,12 @@
-import React from "react";
+import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, TextField } from "@material-ui/core";
-import Alert from "@material-ui/lab/Alert";
+import { LoginData } from "../../types/user";
+import { FormikProps } from "formik";
 import { useSelector } from "react-redux";
-
-import PropTypes from "prop-types";
+import { AuthState } from "../../types/state";
+import Alert from "@material-ui/lab/Alert";
 
 const useStyles = makeStyles((theme) => ({
   submit: {
@@ -13,31 +14,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-RegisterForm.propTypes = {
-  values: PropTypes.object,
-  handleChange: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  isSubmitting: PropTypes.bool,
-};
-
-export default function RegisterForm({
-  values,
-  handleChange,
-  handleSubmit,
-  isSubmitting,
-}) {
+export default function LoginForm(props: FormikProps<LoginData>): ReactElement {
   const classes = useStyles();
 
   const navigate = useNavigate();
 
-  const onClickCancelButton = (_) => {
+  const authReducer = useSelector<any, AuthState>(
+    (reducer) => reducer.authReducer
+  );
+
+  const onClickCancelButton = (_: any) => {
     navigate(-1);
   };
 
-  const loginReducer = useSelector(({ loginReducer }) => loginReducer);
-
   return (
-    <form className={classes.form} noValidate onSubmit={handleSubmit}>
+    <form className={classes.submit} noValidate onSubmit={props.handleSubmit}>
       {/* Username Form */}
       <TextField
         variant="outlined"
@@ -45,8 +36,8 @@ export default function RegisterForm({
         required
         fullWidth
         id="username"
-        value={values.username}
-        onChange={handleChange}
+        value={props.values.username}
+        onChange={props.handleChange}
         label="Username"
         autoComplete="email"
         autoFocus
@@ -59,16 +50,16 @@ export default function RegisterForm({
         fullWidth
         id="password"
         label="Password"
-        value={values.password}
-        onChange={handleChange}
+        value={props.values.password}
+        onChange={props.handleChange}
         type="password"
         name="password"
         autoComplete="current-password"
         autoFocus
       />
       {/* Alert */}
-      {loginReducer.error && (
-        <Alert severity="error">{loginReducer.result}</Alert>
+      {authReducer.errorMessage && (
+        <Alert severity="error">{authReducer.errorMessage}</Alert>
       )}
       {/* Register Button */}
       <Button
@@ -76,7 +67,7 @@ export default function RegisterForm({
         fullWidth
         variant="contained"
         color="primary"
-        disabled={isSubmitting}
+        disabled={props.isSubmitting}
         className={classes.submit}
       >
         Register

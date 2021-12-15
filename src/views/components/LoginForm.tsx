@@ -1,9 +1,9 @@
-import React from "react";
+import { ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Button, TextField } from "@material-ui/core";
-
-import PropTypes from "prop-types";
+import { LoginData } from "../../types/user";
+import { FormikProps } from "formik";
 
 const useStyles = makeStyles((theme) => ({
   submit: {
@@ -11,29 +11,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-LoginForm.propTypes = {
-  values: PropTypes.object,
-  handleChange: PropTypes.func,
-  handleSubmit: PropTypes.func,
-  isSubmitting: PropTypes.bool,
-};
-
-export default function LoginForm({
-  values,
-  handleChange,
-  handleSubmit,
-  isSubmitting,
-}) {
+export default function LoginForm(props: FormikProps<LoginData>): ReactElement {
   const classes = useStyles();
 
   const navigate = useNavigate();
 
-  const onClickRegisterButton = (_) => {
+  const onClickRegisterButton = (_: any) => {
     navigate("/register");
   };
 
   return (
-    <form className={classes.form} noValidate onSubmit={handleSubmit}>
+    <form className={classes.submit} noValidate onSubmit={props.handleSubmit}>
       {/* Username Form */}
       <TextField
         variant="outlined"
@@ -41,8 +29,8 @@ export default function LoginForm({
         required
         fullWidth
         id="username"
-        value={values.username}
-        onChange={handleChange}
+        value={props.values.username}
+        onChange={props.handleChange}
         label="Username"
         autoComplete="email"
         autoFocus
@@ -55,8 +43,8 @@ export default function LoginForm({
         fullWidth
         id="password"
         label="Password"
-        value={values.password}
-        onChange={handleChange}
+        value={props.values.password}
+        onChange={props.handleChange}
         type="password"
         name="password"
         autoComplete="current-password"
@@ -68,7 +56,7 @@ export default function LoginForm({
         fullWidth
         variant="contained"
         color="primary"
-        disabled={isSubmitting}
+        disabled={props.isSubmitting}
         className={classes.submit}
       >
         Sign In
